@@ -11,8 +11,7 @@
     "react-scripts": "5.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "cd server && npm install && node index.js",
+    "start": "cd server && npm install && node index.js",
     "heroku-postbuild": "cd client && npm install && react-scripts build"
   }
 }
