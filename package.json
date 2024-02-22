@@ -6,6 +6,9 @@
     "npm": "9.6.3"
   },
   "private": true,
+  "dependencies": {
+    "react-scripts": "5.0.1"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "cd ./client/ && react-scripts build",
