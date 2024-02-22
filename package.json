@@ -10,7 +10,7 @@
     "dotenv": "^16.4.5"
   },
   "scripts": {
-    "build": "cd ./client/ && npm run build",
-    "heroku-postbuild": "cd server && npm install && node index.js"
+    "build": "cd server && npm install && node index.js",
+    "heroku-postbuild": "cd client && npm install && npm run build"
   }
 }
