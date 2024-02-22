@@ -7,25 +7,10 @@
   },
   "private": true,
   "dependencies": {
-    "react-scripts": "5.0.1"
+    "dotenv": "^16.4.5"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "cd ./client/ && react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "build": "cd ./client/ && npm run build",
     "heroku-postbuild": "cd server && npm install && node index.js"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
   }
 }
