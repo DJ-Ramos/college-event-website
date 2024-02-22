@@ -14,7 +14,7 @@
     "build": "cd ./client/ && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "heroku-postbuild": "cd server && npm install && nodemon index.js"
+    "heroku-postbuild": "cd server && npm install && node index.js"
   },
   "browserslist": {
     "production": [
