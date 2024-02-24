@@ -1,13 +1,14 @@
 {
   "files": {
     "main.css": "/static/css/main.b8bc805e.css",
-    "main.js": "/static/js/main.7c87576e.js",
+    "main.js": "/static/js/main.672809d9.js",
+    "static/media/knightro-searching.jpg": "/static/media/knightro-searching.8104710698bd10d7492f.jpg",
     "index.html": "/index.html",
     "main.b8bc805e.css.map": "/static/css/main.b8bc805e.css.map",
-    "main.7c87576e.js.map": "/static/js/main.7c87576e.js.map"
+    "main.672809d9.js.map": "/static/js/main.672809d9.js.map"
   },
   "entrypoints": [
     "static/css/main.b8bc805e.css",
-    "static/js/main.7c87576e.js"
+    "static/js/main.672809d9.js"
   ]
 }
