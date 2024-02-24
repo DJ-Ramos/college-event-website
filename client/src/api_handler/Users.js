@@ -1,5 +1,5 @@
 export const LoginAPI = (formValues) => {
-  fetch("http://localhost:5000/login", {
+  fetch(`${APP_URL}/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json; charset=UTF-8" },
     body: JSON.stringify(formValues),
@@ -18,7 +18,7 @@ export const LoginAPI = (formValues) => {
 };
 
 export const RegisterAPI = (formValues) => {
-  fetch("http://localhost:5000/register", {
+  fetch(`${APP_URL}/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json; charset=UTF-8" },
     body: JSON.stringify(formValues),
