@@ -1,5 +1,7 @@
+require("dotenv").config({path: "/../.env"});
+
 export const LoginAPI = (formValues) => {
-  fetch(`${APP_URL}/login`, {
+  fetch(`${process.env.APP_URL}/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json; charset=UTF-8" },
     body: JSON.stringify(formValues),
@@ -18,7 +20,7 @@ export const LoginAPI = (formValues) => {
 };
 
 export const RegisterAPI = (formValues) => {
-  fetch(`${APP_URL}/register`, {
+  fetch(`${process.env.APP_URL}/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json; charset=UTF-8" },
     body: JSON.stringify(formValues),
