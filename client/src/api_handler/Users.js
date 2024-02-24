@@ -1,4 +1,4 @@
-require("dotenv").config({path: "/.env"});
+require("dotenv").config();
 
 export const LoginAPI = (formValues) => {
   fetch(`${process.env.APP_URL}/login`, {
