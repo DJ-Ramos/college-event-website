@@ -1,5 +1,3 @@
-require("dotenv").config();
-
 export const LoginAPI = (formValues) => {
   fetch(`${process.env.APP_URL}/login`, {
     method: "POST",
