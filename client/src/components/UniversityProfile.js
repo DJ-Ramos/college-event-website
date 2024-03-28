@@ -21,7 +21,7 @@ const UniversityProfile = () => {
     uni_desc: "",
     uni_num: "",
   });
-f
+
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(formValues);
