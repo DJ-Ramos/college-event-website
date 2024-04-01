@@ -2,9 +2,8 @@ import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./components/Login";
 import Register from "./components/Register";
+import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/404";
-import Home from "./components/Home"; // Check the import statement
-
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
@@ -12,9 +11,9 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-        <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
