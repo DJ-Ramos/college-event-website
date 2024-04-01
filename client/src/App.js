@@ -45,6 +45,6 @@ function App() {
 
 const fetchUserName = () => {
   // Simulate fetching the user's name from some source (e.g., an API call)
-  return 'John Doe'; // Return a placeholder name for demonstration purposes
+  return 'John Doey'; // Return a placeholder name for demonstration purposes
 };
 export default App;
