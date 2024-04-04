@@ -4,10 +4,14 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import React, { useState, useEffect } from 'react';
 import Login from "./components/Login";
 import Register from "./components/Register";
+import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/404";
+<<<<<<< HEAD
 import Home from "./components/Home"; // Check the import statement
 import RSO from "./components/RSO"; 
 import Events from "./components/Events"; 
+=======
+>>>>>>> a5bc3ec197720804119be603ccaaa4b2586a924f
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const UserName = () => {
@@ -31,11 +35,14 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-        <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+<<<<<<< HEAD
           <Route path="/RSO" element={<RSO />} />
           <Route path="/Events" element={<UserName />} />
+=======
+          <Route path="/dashboard" element={<Dashboard />} />
+>>>>>>> a5bc3ec197720804119be603ccaaa4b2586a924f
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

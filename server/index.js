@@ -18,14 +18,14 @@ app.get("*", (req, res) => {
 
 app.post("/register", async (req, res) => {
   try {
-    const body = req.body;
+    const {first_name, last_name, email, password} = req.body;
     const statement_sql =
       "INSERT INTO public.users(first_name, last_name, email, password, user_type) VALUES ($1, $2, $3, $4, $5)";
     const insert_sql = [
-      body.first_name,
-      body.last_name,
-      body.email,
-      body.password,
+      first_name,
+      last_name,
+      email,
+      password,
       "Student",
     ];
     const execute_sql = await pool.query(statement_sql, insert_sql);
