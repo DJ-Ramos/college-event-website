@@ -15,6 +15,16 @@ const Navbar = () => {
                     backgroundColor: "navy",
                     borderRadius:"4px"
                 }}>RSO</a>
+                <a href="/Dashboard" style={{
+                    color:"gold",
+                    backgroundColor: "navy",
+                    borderRadius:"4px"
+                }}>Dashboard</a>
+                <a href="/Login" style={{
+                    color:"gold",
+                    backgroundColor: "navy",
+                    borderRadius:"4px"
+                }}>Login</a>
             </div>
         </nav>
      );
