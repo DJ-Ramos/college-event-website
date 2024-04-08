@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { CreateUniversityAPI } from "../api_handler/University";
 import { Button, Modal, Nav, Form } from "react-bootstrap";
+import getCookie from "../hooks/getCookie";
 
 const UniversityProfile = () => {
   const [show, setShow] = useState(false);
@@ -22,11 +24,12 @@ const UniversityProfile = () => {
     uni_num: "",
   });
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(formValues);
 
-    //RegisterAPI(formValues);
+    formValues.user_id = getCookie("user_id");
+    console.log(formValues);
+    const data = await CreateUniversityAPI(formValues);
 
     setFormValues({
       uni_name: "",
@@ -36,6 +39,7 @@ const UniversityProfile = () => {
     });
 
     handleClose();
+    window.location.reload();
   };
 
   const handleChange = (event) => {
@@ -101,7 +105,7 @@ const UniversityProfile = () => {
                   value={formValues.uni_num}
                   type="text"
                   inputMode="numeric"
-                  pattern="[1-9]*"
+                  pattern="[0-9]*"
                   title="Please enter a postive integer."
                   placeholder="University Student Count"
                   onChange={handleChange}
@@ -116,7 +120,6 @@ const UniversityProfile = () => {
                 name="university_banner"
                 type="file"
                 accept="image/*"
-                required
               />
             </Form.Group>
           </Modal.Body>

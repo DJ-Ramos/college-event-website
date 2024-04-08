@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { RegisterAPI } from "../api_handler/Users";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button, Form, Card } from "react-bootstrap";
 import FormLayout from "../layouts/FormLayout";
 import logo from "../assets/logo.png";
 
 const Register = () => {
+  const navigate = useNavigate();
+  
   const [formValues, setFormValues] = useState({
     email: "",
     password: "",
@@ -13,11 +15,11 @@ const Register = () => {
     last_name: "",
   });
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     console.log(formValues);
 
-    RegisterAPI(formValues);
+    const status = await RegisterAPI(formValues);
 
     setFormValues({
       email: "",
@@ -25,6 +27,9 @@ const Register = () => {
       first_name: "",
       last_name: "",
     });
+
+    if (status == 200)
+      navigate("/login");
   };
 
   const handleChange = (event) => {
