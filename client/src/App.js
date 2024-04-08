@@ -10,7 +10,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 function App() {
   return (
     <div className="App">
-      <Navbar/>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login />} />
