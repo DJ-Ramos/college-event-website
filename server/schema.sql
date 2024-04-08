@@ -5,7 +5,7 @@
 -- Dumped from database version 16.2
 -- Dumped by pg_dump version 16.2
 
--- Started on 2024-03-28 15:59:06
+-- Started on 2024-03-29 20:34:15
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -19,7 +19,7 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- TOC entry 231 (class 1255 OID 16582)
+-- TOC entry 233 (class 1255 OID 16582)
 -- Name: check_admin_id(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -27,8 +27,8 @@ CREATE FUNCTION public.check_admin_id() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
-    IF NEW.users_id NOT IN (SELECT users_id FROM users) THEN
-        RAISE EXCEPTION 'admin users_id must exist in users table';
+    IF NEW.user_id NOT IN (SELECT user_id FROM users) THEN
+        RAISE EXCEPTION 'admin user_id must exist in user table';
     END IF;
 
     RETURN NEW;
@@ -39,7 +39,7 @@ $$;
 ALTER FUNCTION public.check_admin_id() OWNER TO postgres;
 
 --
--- TOC entry 233 (class 1255 OID 16586)
+-- TOC entry 231 (class 1255 OID 16586)
 -- Name: check_pr_event_disjoint(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -47,8 +47,8 @@ CREATE FUNCTION public.check_pr_event_disjoint() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
-    IF NEW.events_id IN (SELECT events_id FROM public_events) 
-	OR NEW.events_id IN (SELECT events_id FROM rso_events) THEN
+    IF NEW.event_id IN (SELECT event_id FROM public_events) 
+	OR NEW.event_id IN (SELECT event_id FROM rso_events) THEN
         RAISE EXCEPTION 'private_events event_id must not exist in public_events or rso_events tables';
     END IF;
 
@@ -88,8 +88,8 @@ CREATE FUNCTION public.check_pu_event_disjoint() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
-    IF NEW.events_id IN (SELECT events_id FROM private_events) 
-	OR NEW.events_id IN (SELECT events_id FROM rso_events) THEN
+    IF NEW.event_id IN (SELECT event_id FROM private_events) 
+	OR NEW.event_id IN (SELECT event_id FROM rso_events) THEN
         RAISE EXCEPTION 'public_events event_id must not exist in private_events or rso_events tables';
     END IF;
 
@@ -129,8 +129,8 @@ CREATE FUNCTION public.check_rso_event_disjoint() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
-    IF NEW.events_id IN (SELECT events_id FROM private_events) 
-	OR NEW.events_id IN (SELECT events_id FROM public_events) THEN
+    IF NEW.event_id IN (SELECT event_id FROM private_events) 
+	OR NEW.event_id IN (SELECT event_id FROM public_events) THEN
         RAISE EXCEPTION 'rso_events event_id must not exist in private_events or public_events tables';
     END IF;
 
@@ -170,8 +170,8 @@ CREATE FUNCTION public.check_super_admin_id() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
-    IF NEW.users_id NOT IN (SELECT users_id FROM users) THEN
-        RAISE EXCEPTION 'super admin users_id must exist in users table';
+    IF NEW.user_id NOT IN (SELECT user_id FROM users) THEN
+        RAISE EXCEPTION 'super admin user_id must exist in users table';
     END IF;
 
     RETURN NEW;
@@ -191,7 +191,7 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.admins (
-    users_id integer NOT NULL
+    user_id integer NOT NULL
 );
 
 
@@ -203,11 +203,11 @@ ALTER TABLE public.admins OWNER TO postgres;
 --
 
 CREATE TABLE public.comments (
-    users_id integer NOT NULL,
+    user_id integer NOT NULL,
     text text,
     rating integer,
     "timestamp" timestamp without time zone,
-    events_id integer NOT NULL,
+    event_id integer NOT NULL,
     CONSTRAINT comment_rating_non_null CHECK (((text IS NOT NULL) OR (rating IS NOT NULL)))
 );
 
@@ -220,12 +220,12 @@ ALTER TABLE public.comments OWNER TO postgres;
 --
 
 CREATE TABLE public.events (
-    events_id integer NOT NULL,
+    event_id integer NOT NULL,
     "time" time without time zone NOT NULL,
     date date NOT NULL,
     description text,
     event_name character varying(32) NOT NULL,
-    lname character varying(32) NOT NULL
+    location_name character varying(32) NOT NULL
 );
 
 
@@ -237,8 +237,8 @@ ALTER TABLE public.events OWNER TO postgres;
 --
 
 CREATE TABLE public."join" (
-    users_id integer NOT NULL,
-    rsos_id integer NOT NULL
+    user_id integer NOT NULL,
+    rso_id integer NOT NULL
 );
 
 
@@ -250,7 +250,7 @@ ALTER TABLE public."join" OWNER TO postgres;
 --
 
 CREATE TABLE public.location (
-    lname character varying(32) NOT NULL,
+    location_name character varying(32) NOT NULL,
     address character varying(64) NOT NULL,
     longitude double precision,
     latitude double precision
@@ -265,9 +265,9 @@ ALTER TABLE public.location OWNER TO postgres;
 --
 
 CREATE TABLE public.private_events (
-    events_id integer NOT NULL,
-    admins_id integer NOT NULL,
-    super_admins_id integer NOT NULL
+    event_id integer NOT NULL,
+    admin_id integer NOT NULL,
+    super_admin_id integer NOT NULL
 );
 
 
@@ -279,9 +279,9 @@ ALTER TABLE public.private_events OWNER TO postgres;
 --
 
 CREATE TABLE public.public_events (
-    events_id integer NOT NULL,
-    admins_id integer NOT NULL,
-    super_admins_id integer NOT NULL
+    event_id integer NOT NULL,
+    admin_id integer NOT NULL,
+    super_admin_id integer NOT NULL
 );
 
 
@@ -293,8 +293,8 @@ ALTER TABLE public.public_events OWNER TO postgres;
 --
 
 CREATE TABLE public.rso_events (
-    events_id integer NOT NULL,
-    rsos_id integer NOT NULL
+    event_id integer NOT NULL,
+    rso_id integer NOT NULL
 );
 
 
@@ -306,9 +306,9 @@ ALTER TABLE public.rso_events OWNER TO postgres;
 --
 
 CREATE TABLE public.rsos (
-    rsos_id integer NOT NULL,
-    rname character varying(32) NOT NULL,
-    admins_id integer NOT NULL
+    rso_id integer NOT NULL,
+    rso_name character varying(32) NOT NULL,
+    admin_id integer NOT NULL
 );
 
 
@@ -320,7 +320,7 @@ ALTER TABLE public.rsos OWNER TO postgres;
 --
 
 CREATE TABLE public.super_admins (
-    users_id integer NOT NULL
+    user_id integer NOT NULL
 );
 
 
@@ -332,11 +332,12 @@ ALTER TABLE public.super_admins OWNER TO postgres;
 --
 
 CREATE TABLE public.universities (
-    super_admins_id integer NOT NULL,
-    uname character varying(32) NOT NULL,
-    lname character varying(32),
+    super_admin_id integer NOT NULL,
+    university_name character varying(32) NOT NULL,
+    location_name character varying(32),
     description text,
-    num_students integer
+    num_students integer,
+    university_id integer NOT NULL
 );
 
 
@@ -376,7 +377,7 @@ CREATE SEQUENCE public.users_user_id_seq
 ALTER SEQUENCE public.users_user_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4947 (class 0 OID 0)
+-- TOC entry 4949 (class 0 OID 0)
 -- Dependencies: 216
 -- Name: users_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -394,20 +395,20 @@ ALTER TABLE ONLY public.users ALTER COLUMN users_id SET DEFAULT nextval('public.
 
 --
 -- TOC entry 4763 (class 2606 OID 16461)
--- Name: admins admins_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: admins admin_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.admins
-    ADD CONSTRAINT admins_pkey PRIMARY KEY (users_id);
+    ADD CONSTRAINT admin_pkey PRIMARY KEY (user_id);
 
 
 --
 -- TOC entry 4747 (class 2606 OID 16417)
--- Name: events events_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: events event_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.events
-    ADD CONSTRAINT events_pkey PRIMARY KEY (events_id);
+    ADD CONSTRAINT event_pkey PRIMARY KEY (event_id);
 
 
 --
@@ -416,52 +417,52 @@ ALTER TABLE ONLY public.events
 --
 
 ALTER TABLE ONLY public.location
-    ADD CONSTRAINT location_pkey PRIMARY KEY (lname);
+    ADD CONSTRAINT location_pkey PRIMARY KEY (location_name);
 
 
 --
 -- TOC entry 4754 (class 2606 OID 16426)
--- Name: private_events private_events_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: private_events private_event_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.private_events
-    ADD CONSTRAINT private_events_pkey PRIMARY KEY (events_id);
+    ADD CONSTRAINT private_event_pkey PRIMARY KEY (event_id);
 
 
 --
 -- TOC entry 4757 (class 2606 OID 16431)
--- Name: public_events public_events_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: public_events public_event_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.public_events
-    ADD CONSTRAINT public_events_pkey PRIMARY KEY (events_id);
+    ADD CONSTRAINT public_event_pkey PRIMARY KEY (event_id);
 
 
 --
 -- TOC entry 4759 (class 2606 OID 16446)
--- Name: rso_events rso_events_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: rso_events rso_event_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.rso_events
-    ADD CONSTRAINT rso_events_pkey PRIMARY KEY (events_id);
+    ADD CONSTRAINT rso_event_pkey PRIMARY KEY (event_id);
 
 
 --
--- TOC entry 4770 (class 2606 OID 16522)
--- Name: rsos rsos_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- TOC entry 4772 (class 2606 OID 16522)
+-- Name: rsos rso_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.rsos
-    ADD CONSTRAINT rsos_pkey PRIMARY KEY (rsos_id);
+    ADD CONSTRAINT rso_pkey PRIMARY KEY (rso_id);
 
 
 --
 -- TOC entry 4765 (class 2606 OID 16471)
--- Name: super_admins super_admins_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: super_admins super_admin_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.super_admins
-    ADD CONSTRAINT super_admins_pkey PRIMARY KEY (users_id);
+    ADD CONSTRAINT super_admin_pkey PRIMARY KEY (user_id);
 
 
 --
@@ -470,7 +471,16 @@ ALTER TABLE ONLY public.super_admins
 --
 
 ALTER TABLE ONLY public.events
-    ADD CONSTRAINT unique_time_and_location UNIQUE ("time", lname);
+    ADD CONSTRAINT unique_time_and_location UNIQUE ("time", location_name);
+
+
+--
+-- TOC entry 4770 (class 2606 OID 16593)
+-- Name: universities university_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.universities
+    ADD CONSTRAINT university_pkey PRIMARY KEY (university_id);
 
 
 --
@@ -496,7 +506,7 @@ ALTER TABLE ONLY public.users
 -- Name: fki_a; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE INDEX fki_a ON public.public_events USING btree (super_admins_id);
+CREATE INDEX fki_a ON public.public_events USING btree (super_admin_id);
 
 
 --
@@ -504,7 +514,7 @@ CREATE INDEX fki_a ON public.public_events USING btree (super_admins_id);
 -- Name: fki_admins_fkey; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE INDEX fki_admins_fkey ON public.private_events USING btree (admins_id);
+CREATE INDEX fki_admins_fkey ON public.private_events USING btree (admin_id);
 
 
 --
@@ -512,7 +522,7 @@ CREATE INDEX fki_admins_fkey ON public.private_events USING btree (admins_id);
 -- Name: fki_events_fkey; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE INDEX fki_events_fkey ON public.comments USING btree (events_id);
+CREATE INDEX fki_events_fkey ON public.comments USING btree (event_id);
 
 
 --
@@ -520,7 +530,7 @@ CREATE INDEX fki_events_fkey ON public.comments USING btree (events_id);
 -- Name: fki_location_fkey; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE INDEX fki_location_fkey ON public.events USING btree (lname);
+CREATE INDEX fki_location_fkey ON public.events USING btree (location_name);
 
 
 --
@@ -528,15 +538,15 @@ CREATE INDEX fki_location_fkey ON public.events USING btree (lname);
 -- Name: fki_locations_fkey; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE INDEX fki_locations_fkey ON public.universities USING btree (lname);
+CREATE INDEX fki_locations_fkey ON public.universities USING btree (location_name);
 
 
 --
--- TOC entry 4771 (class 1259 OID 16541)
+-- TOC entry 4773 (class 1259 OID 16541)
 -- Name: fki_rsos_fkey; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE INDEX fki_rsos_fkey ON public."join" USING btree (rsos_id);
+CREATE INDEX fki_rsos_fkey ON public."join" USING btree (rso_id);
 
 
 --
@@ -544,7 +554,7 @@ CREATE INDEX fki_rsos_fkey ON public."join" USING btree (rsos_id);
 -- Name: fki_super_admins_fkey; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE INDEX fki_super_admins_fkey ON public.private_events USING btree (super_admins_id);
+CREATE INDEX fki_super_admins_fkey ON public.private_events USING btree (super_admin_id);
 
 
 --
@@ -552,11 +562,11 @@ CREATE INDEX fki_super_admins_fkey ON public.private_events USING btree (super_a
 -- Name: fki_users_fkey; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE INDEX fki_users_fkey ON public.comments USING btree (users_id);
+CREATE INDEX fki_users_fkey ON public.comments USING btree (user_id);
 
 
 --
--- TOC entry 4796 (class 2620 OID 16583)
+-- TOC entry 4798 (class 2620 OID 16583)
 -- Name: admins admin_isa_user; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -564,7 +574,7 @@ CREATE TRIGGER admin_isa_user BEFORE INSERT OR UPDATE ON public.admins FOR EACH 
 
 
 --
--- TOC entry 4790 (class 2620 OID 16587)
+-- TOC entry 4792 (class 2620 OID 16587)
 -- Name: private_events pr_event_disjoint; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -572,7 +582,7 @@ CREATE TRIGGER pr_event_disjoint BEFORE INSERT OR UPDATE ON public.private_event
 
 
 --
--- TOC entry 4791 (class 2620 OID 16577)
+-- TOC entry 4793 (class 2620 OID 16577)
 -- Name: private_events pr_isa_event; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -580,7 +590,7 @@ CREATE TRIGGER pr_isa_event BEFORE INSERT OR UPDATE ON public.private_events FOR
 
 
 --
--- TOC entry 4792 (class 2620 OID 16589)
+-- TOC entry 4794 (class 2620 OID 16589)
 -- Name: public_events pu_event_disjoint; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -588,7 +598,7 @@ CREATE TRIGGER pu_event_disjoint BEFORE INSERT OR UPDATE ON public.public_events
 
 
 --
--- TOC entry 4793 (class 2620 OID 16579)
+-- TOC entry 4795 (class 2620 OID 16579)
 -- Name: public_events pu_isa_event; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -596,7 +606,7 @@ CREATE TRIGGER pu_isa_event BEFORE INSERT OR UPDATE ON public.public_events FOR 
 
 
 --
--- TOC entry 4794 (class 2620 OID 16591)
+-- TOC entry 4796 (class 2620 OID 16591)
 -- Name: rso_events rso_event_disjoint; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -604,7 +614,7 @@ CREATE TRIGGER rso_event_disjoint BEFORE INSERT OR UPDATE ON public.rso_events F
 
 
 --
--- TOC entry 4795 (class 2620 OID 16581)
+-- TOC entry 4797 (class 2620 OID 16581)
 -- Name: rso_events rso_isa_event; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -612,7 +622,7 @@ CREATE TRIGGER rso_isa_event BEFORE INSERT OR UPDATE ON public.rso_events FOR EA
 
 
 --
--- TOC entry 4797 (class 2620 OID 16585)
+-- TOC entry 4799 (class 2620 OID 16585)
 -- Name: super_admins super_admin_isa_user; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -620,169 +630,169 @@ CREATE TRIGGER super_admin_isa_user BEFORE INSERT OR UPDATE ON public.super_admi
 
 
 --
--- TOC entry 4787 (class 2606 OID 16523)
--- Name: rsos admins_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- TOC entry 4789 (class 2606 OID 16523)
+-- Name: rsos admin_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.rsos
-    ADD CONSTRAINT admins_fkey FOREIGN KEY (admins_id) REFERENCES public.admins(users_id);
+    ADD CONSTRAINT admin_fkey FOREIGN KEY (admin_id) REFERENCES public.admins(user_id);
 
 
 --
--- TOC entry 4773 (class 2606 OID 16548)
--- Name: private_events admins_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- TOC entry 4775 (class 2606 OID 16548)
+-- Name: private_events admin_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.private_events
-    ADD CONSTRAINT admins_fkey FOREIGN KEY (admins_id) REFERENCES public.admins(users_id);
+    ADD CONSTRAINT admin_fkey FOREIGN KEY (admin_id) REFERENCES public.admins(user_id);
 
 
 --
--- TOC entry 4776 (class 2606 OID 16560)
--- Name: public_events admins_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- TOC entry 4778 (class 2606 OID 16560)
+-- Name: public_events admin_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.public_events
-    ADD CONSTRAINT admins_fkey FOREIGN KEY (admins_id) REFERENCES public.admins(users_id);
+    ADD CONSTRAINT admin_fkey FOREIGN KEY (admin_id) REFERENCES public.admins(user_id);
 
 
 --
--- TOC entry 4774 (class 2606 OID 16432)
--- Name: private_events events_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- TOC entry 4776 (class 2606 OID 16432)
+-- Name: private_events event_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.private_events
-    ADD CONSTRAINT events_fkey FOREIGN KEY (events_id) REFERENCES public.events(events_id);
+    ADD CONSTRAINT event_fkey FOREIGN KEY (event_id) REFERENCES public.events(event_id);
 
 
 --
--- TOC entry 4783 (class 2606 OID 16490)
--- Name: comments events_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- TOC entry 4779 (class 2606 OID 16437)
+-- Name: public_events event_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.public_events
+    ADD CONSTRAINT event_fkey FOREIGN KEY (event_id) REFERENCES public.events(event_id);
+
+
+--
+-- TOC entry 4785 (class 2606 OID 16490)
+-- Name: comments event_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.comments
-    ADD CONSTRAINT events_fkey FOREIGN KEY (events_id) REFERENCES public.events(events_id);
+    ADD CONSTRAINT event_fkey FOREIGN KEY (event_id) REFERENCES public.events(event_id);
 
 
 --
--- TOC entry 4777 (class 2606 OID 16437)
--- Name: public_events events_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.public_events
-    ADD CONSTRAINT events_id FOREIGN KEY (events_id) REFERENCES public.events(events_id);
-
-
---
--- TOC entry 4779 (class 2606 OID 16447)
--- Name: rso_events events_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- TOC entry 4781 (class 2606 OID 16447)
+-- Name: rso_events event_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.rso_events
-    ADD CONSTRAINT events_id FOREIGN KEY (events_id) REFERENCES public.events(events_id);
+    ADD CONSTRAINT event_id FOREIGN KEY (event_id) REFERENCES public.events(event_id);
 
 
 --
--- TOC entry 4772 (class 2606 OID 16542)
+-- TOC entry 4787 (class 2606 OID 16512)
+-- Name: universities location_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.universities
+    ADD CONSTRAINT location_fkey FOREIGN KEY (location_name) REFERENCES public.location(location_name);
+
+
+--
+-- TOC entry 4774 (class 2606 OID 16542)
 -- Name: events location_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.events
-    ADD CONSTRAINT location_fkey FOREIGN KEY (lname) REFERENCES public.location(lname);
+    ADD CONSTRAINT location_fkey FOREIGN KEY (location_name) REFERENCES public.location(location_name);
 
 
 --
--- TOC entry 4785 (class 2606 OID 16512)
--- Name: universities locations_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.universities
-    ADD CONSTRAINT locations_fkey FOREIGN KEY (lname) REFERENCES public.location(lname);
-
-
---
--- TOC entry 4788 (class 2606 OID 16536)
--- Name: join rsos_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- TOC entry 4790 (class 2606 OID 16536)
+-- Name: join rso_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public."join"
-    ADD CONSTRAINT rsos_fkey FOREIGN KEY (rsos_id) REFERENCES public.rsos(rsos_id);
+    ADD CONSTRAINT rso_fkey FOREIGN KEY (rso_id) REFERENCES public.rsos(rso_id);
 
 
 --
--- TOC entry 4780 (class 2606 OID 16571)
--- Name: rso_events rsos_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- TOC entry 4782 (class 2606 OID 16571)
+-- Name: rso_events rso_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.rso_events
-    ADD CONSTRAINT rsos_fkey FOREIGN KEY (rsos_id) REFERENCES public.rsos(rsos_id);
+    ADD CONSTRAINT rso_fkey FOREIGN KEY (rso_id) REFERENCES public.rsos(rso_id);
 
 
 --
--- TOC entry 4786 (class 2606 OID 16507)
--- Name: universities super_admins_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- TOC entry 4788 (class 2606 OID 16507)
+-- Name: universities super_admin_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.universities
-    ADD CONSTRAINT super_admins_fkey FOREIGN KEY (super_admins_id) REFERENCES public.super_admins(users_id);
+    ADD CONSTRAINT super_admin_fkey FOREIGN KEY (super_admin_id) REFERENCES public.super_admins(user_id);
 
 
 --
--- TOC entry 4775 (class 2606 OID 16554)
--- Name: private_events super_admins_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- TOC entry 4777 (class 2606 OID 16554)
+-- Name: private_events super_admin_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.private_events
-    ADD CONSTRAINT super_admins_fkey FOREIGN KEY (super_admins_id) REFERENCES public.super_admins(users_id);
+    ADD CONSTRAINT super_admin_fkey FOREIGN KEY (super_admin_id) REFERENCES public.super_admins(user_id);
 
 
 --
--- TOC entry 4778 (class 2606 OID 16565)
--- Name: public_events super_admins_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- TOC entry 4780 (class 2606 OID 16565)
+-- Name: public_events super_admin_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.public_events
-    ADD CONSTRAINT super_admins_fkey FOREIGN KEY (super_admins_id) REFERENCES public.super_admins(users_id);
+    ADD CONSTRAINT super_admin_fkey FOREIGN KEY (super_admin_id) REFERENCES public.super_admins(user_id);
 
 
 --
--- TOC entry 4781 (class 2606 OID 16462)
--- Name: admins users_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- TOC entry 4783 (class 2606 OID 16462)
+-- Name: admins user_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.admins
-    ADD CONSTRAINT users_fkey FOREIGN KEY (users_id) REFERENCES public.users(users_id);
+    ADD CONSTRAINT user_fkey FOREIGN KEY (user_id) REFERENCES public.users(users_id);
 
 
 --
--- TOC entry 4784 (class 2606 OID 16496)
--- Name: comments users_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.comments
-    ADD CONSTRAINT users_fkey FOREIGN KEY (users_id) REFERENCES public.users(users_id);
-
-
---
--- TOC entry 4789 (class 2606 OID 16531)
--- Name: join users_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."join"
-    ADD CONSTRAINT users_fkey FOREIGN KEY (users_id) REFERENCES public.users(users_id);
-
-
---
--- TOC entry 4782 (class 2606 OID 16472)
--- Name: super_admins users_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- TOC entry 4784 (class 2606 OID 16472)
+-- Name: super_admins user_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.super_admins
-    ADD CONSTRAINT users_id FOREIGN KEY (users_id) REFERENCES public.users(users_id);
+    ADD CONSTRAINT user_fkey FOREIGN KEY (user_id) REFERENCES public.users(users_id);
 
 
 --
--- TOC entry 4946 (class 0 OID 0)
+-- TOC entry 4786 (class 2606 OID 16496)
+-- Name: comments user_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.comments
+    ADD CONSTRAINT user_fkey FOREIGN KEY (user_id) REFERENCES public.users(users_id);
+
+
+--
+-- TOC entry 4791 (class 2606 OID 16531)
+-- Name: join user_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."join"
+    ADD CONSTRAINT user_fkey FOREIGN KEY (user_id) REFERENCES public.users(users_id);
+
+
+--
+-- TOC entry 4948 (class 0 OID 0)
 -- Dependencies: 5
 -- Name: SCHEMA public; Type: ACL; Schema: -; Owner: pg_database_owner
 --
@@ -790,7 +800,7 @@ ALTER TABLE ONLY public.super_admins
 REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 
 
--- Completed on 2024-03-28 15:59:06
+-- Completed on 2024-03-29 20:34:15
 
 --
 -- PostgreSQL database dump complete
