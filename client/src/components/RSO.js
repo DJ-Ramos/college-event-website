@@ -1,3 +1,4 @@
+import "../components/style/backgroundStar.css";
 import React, { useEffect } from 'react';
 
 const RSO = () => {

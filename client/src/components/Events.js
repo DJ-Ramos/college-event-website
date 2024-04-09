@@ -2,6 +2,7 @@ import {useState} from 'react';
 import React from 'react';
 import "../App.js";
 import MapOfUniversities from '../assets/Map-of-universities.png';
+
 const Events = ({userName}) => {
     {/*console.log('Received userName prop:', userName); // Log the received prop value to the console
     const [name,setName] = useState('mario');
