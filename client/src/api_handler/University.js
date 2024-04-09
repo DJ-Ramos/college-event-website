@@ -1,6 +1,6 @@
 export const CreateUniversityAPI = async (formValues) => {
   let status;
-  await fetch(`http://localhost:5000/dashboard`, {
+  await fetch(`${process.env.APP_URL}/dashboard`, {
     method: "POST",
     headers: { "Content-Type": "application/json; charset=UTF-8" },
     body: JSON.stringify(formValues),
@@ -21,7 +21,7 @@ export const CreateUniversityAPI = async (formValues) => {
 
 export const GetUniversityAPI = async () => {
   let universityData;
-  await fetch(`http://localhost:5000/dashboard/university_list`)
+  await fetch(`${process.env.APP_URL}/dashboard/university_list`)
     .then((res) => {
       if (res.ok) {
         return res.json();
