@@ -4,9 +4,7 @@ const cors = require("cors");
 const pool = require("./db");
 const app = express();
 
-app.use(cors({
-  origin: 'https://college-event-website-fb75aa7fe949.herokuapp.com'
-}));
+app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "/../client/build")));
 
