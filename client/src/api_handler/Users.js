@@ -22,7 +22,7 @@ export const LoginAPI = async (formValues) => {
 
 export const RegisterAPI = async (formValues) => {
   let status;
-  await fetch(`${process.env.APP_URL}/register`, {
+  await fetch(`https://college-event-website-fb75aa7fe949.herokuapp.com/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json; charset=UTF-8" },
     body: JSON.stringify(formValues),
