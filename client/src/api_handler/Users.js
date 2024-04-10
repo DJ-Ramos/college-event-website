@@ -2,7 +2,10 @@ export const LoginAPI = async (formValues) => {
   let userData;
   await fetch(`https://college-event-website-fb75aa7fe949.herokuapp.com/login`, {
     method: "POST",
-    headers: { "Content-Type": "application/json; charset=UTF-8" },
+    headers: {
+      "Content-Type": "application/json; charset=UTF-8",
+      Host: "https://college-event-website-fb75aa7fe949.herokuapp.com",
+    },
     body: JSON.stringify(formValues),
   })
     .then((res) => {
@@ -24,7 +27,10 @@ export const RegisterAPI = async (formValues) => {
   let status;
   await fetch(`https://college-event-website-fb75aa7fe949.herokuapp.com/register`, {
     method: "POST",
-    headers: { "Content-Type": "application/json; charset=UTF-8" },
+    headers: {
+      "Content-Type": "application/json; charset=UTF-8",
+      Host: "https://college-event-website-fb75aa7fe949.herokuapp.com",
+    },
     body: JSON.stringify(formValues),
   })
     .then((res) => {
