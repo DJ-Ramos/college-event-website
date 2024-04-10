@@ -28,6 +28,7 @@ app.get("/dashboard/university_list", async (req, res) => {
   } catch (err) {
     res.status(400).json({
       error: "Error in Retrieving Universities.",
+      exception: err,
     });
   }
 });
@@ -52,6 +53,7 @@ app.post("/register", async (req, res) => {
     res.status(400).json({
       error:
         "Error in Registering Account. This Email Might Have Been Already Registered. Try Again.",
+      exception: err,
     });
   }
 });
@@ -83,6 +85,7 @@ app.post("/dashboard", async (req, res) => {
     res.status(400).json({
       error:
         "Error in Inserting University Profile. This University Profile Might Have Been Already Created.",
+      exception: err,
     });
   }
 });
