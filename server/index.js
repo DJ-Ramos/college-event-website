@@ -52,7 +52,7 @@ app.post("/register", async (req, res) => {
   } catch (err) {
     res.status(400).json({
       error:
-        "Error in Registering Account. This Email Might Have Been Already Registered. Try Again.",
+        "Error in Registering Account. This Email Might Have Been Already Registered. Try Again. " + err.message,
       exception: err,
     });
   }
