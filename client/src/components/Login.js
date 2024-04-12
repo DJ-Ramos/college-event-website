@@ -1,26 +1,37 @@
 import { useState } from "react";
 import { LoginAPI } from "../api_handler/Users";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button, Form, Card } from "react-bootstrap";
+import setCookie from "../hooks/setCookie"
 import FormLayout from "../layouts/FormLayout";
 import logo from "../assets/logo.png";
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const [formValues, setFormValues] = useState({
     email: "",
     password: "",
   });
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     console.log(formValues);
 
-    LoginAPI(formValues);
+    const data = await LoginAPI(formValues);
 
     setFormValues({
       email: "",
       password: "",
     });
+
+    if (data.status == 200) {
+      setCookie('user_id', data.users_id)
+      setCookie('first_name', data.first_name)
+      setCookie('last_name', data.last_name)
+      setCookie('user_type', data.user_type)
+      navigate("/dashboard", { replace: true });
+    }
   };
 
   const handleChange = (event) => {
