@@ -11,7 +11,7 @@ export const CreateUniversityAPI = async (formValues) => {
         return res.json();
       } else {
         throw new Error(
-          "Error in Creating University Profile. This University Might Have Been Already Created."
+          alert("Error in Creating University Profile. This University Might Have Been Already Created.")
         );
       }
     })
@@ -20,13 +20,16 @@ export const CreateUniversityAPI = async (formValues) => {
 };
 
 export const GetUniversityAPI = async () => {
-  let universityData;
-  await fetch(`${process.env.APP_URL}/dashboard/university_list`)
+  let universityData = [];
+  await fetch(`http://localhost:5000/dashboard/university_list`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json; charset=UTF-8" },
+  })
     .then((res) => {
       if (res.ok) {
         return res.json();
       } else {
-        throw new Error("Error in Retrieving Universities.");
+        throw new Error(alert("Error in Retrieving Universities."));
       }
     })
     .then((data) => {

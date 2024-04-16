@@ -1,10 +1,12 @@
 import "./App.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useParams } from "react-router-dom";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import NotFound from "./pages/404";
 import Dashboard from "./pages/Dashboard";
+import RSODashboard from "./pages/RSODashboard";
 import PrivateRoutes from "./utils/PrivateRoutes";
+import EventDashboard from "./pages/EventDashboard";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
@@ -17,6 +19,9 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route element={<PrivateRoutes/>}>
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard/university/:id" element={<RSODashboard />} />
+            <Route path="/dashboard/university/:id/public_events" element={<RSODashboard />} />
+            <Route path="/dashboard/university/:id/rso/:rso_id" element={<EventDashboard />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
