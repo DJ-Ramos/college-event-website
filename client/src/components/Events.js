@@ -1,35 +1,28 @@
-import {useState} from 'react';
+
 import React from 'react';
-import "../App.js";
+import styled from 'styled-components';
 import MapOfUniversities from '../assets/Map-of-universities.png';
-const Events = ({userName}) => {
-    {/*console.log('Received userName prop:', userName); // Log the received prop value to the console
-    const [name,setName] = useState('mario');
-    const [age,setAge] = useState(25);
-    const handleClick = () =>
-    {
-      setName('luigi');
-      setAge('30');
-    }
-  */}
 
+const Container = styled.div`
+  background-image: url(${MapOfUniversities}); /* Set background image */
+  background-size: auto; /* Cover the entire container with the image */
+  background-position: center; /* Center the background image */
+  background-repeat: no-repeat;
+  color: black; /* Set text color */
+  min-height: 100vh; /* Minimum height of the container, ensuring it fills the viewport */
+  width: 100vw; /* Ensure the container fills the entire viewport width */
+  font-size: 18px; /* Font size */
+  font-family: 'Arial', sans-serif; /* Font family */
+  /* Add more styles as needed */
+`;
 
-    return (
-      <div style={{ backgroundImage: `url(${MapOfUniversities})`,
-        backgroundRepeat:"no-repeat",
-        backgroundSize:"auto", 
-        backgroundPosition:"center",
-        height: "100vh", // Set the height to 100% of viewport height
-        width: "100vw", // Set the width to 100% of viewport width
-        overflow: "hidden", // Hide any content that overflows the container     
-      }}>
-        
-        <h1>Welcome to Events!</h1>
-        {/*<h2>Hello again {userName}!</h2>
-        <p>{ name } is {age} years old</p>
-        <button onClick ={handleClick}>Click me</button>
-    <p>Here are some events from your college/university you might be interested:</p>*/}
-      </div>
-    );
-  };
-  export default Events;
+const Events = ({ userName }) => {
+  return (
+    <Container>
+      <h1>Welcome to Events!</h1>
+      {/* Other content */}
+    </Container>
+  );
+};
+
+export default Events;

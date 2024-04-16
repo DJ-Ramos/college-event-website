@@ -1,8 +1,8 @@
 export const LoginAPI = async (formValues) => {
-  let res = null;
-  await fetch(`http://localhost:5000/login`, {
+  let userData;
+  await fetch(`/login`, {
     method: "POST",
-    headers: { "Content-Type": "application/json; charset=UTF-8" },
+    headers: {"Content-Type": "application/json; charset=UTF-8"},
     body: JSON.stringify(formValues),
   })
     .then((res) => {
@@ -25,9 +25,9 @@ export const LoginAPI = async (formValues) => {
 
 export const RegisterAPI = async (formValues) => {
   let status;
-  await fetch(process.env.APP_URL + "/register", {
+  await fetch(`/register`, {
     method: "POST",
-    headers: { "Content-Type": "application/json; charset=UTF-8" },
+    headers: {"Content-Type": "application/json; charset=UTF-8"},
     body: JSON.stringify(formValues),
   })
     .then((res) => {
