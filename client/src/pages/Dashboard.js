@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Container, Row, Col, Button, Card, Navbar, Nav } from "react-bootstrap";
+import { Container, Navbar, Nav } from "react-bootstrap";
 import DisplayUniversity from "../components/DisplayUniversity";
 import UniversityProfile from "../components/UniversityProfile";
 import removeCookie from "../hooks/removeCookie"

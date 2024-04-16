@@ -18,19 +18,21 @@ const Login = () => {
     event.preventDefault();
     console.log(formValues);
 
-    const data = await LoginAPI(formValues);
+    const res = await LoginAPI(formValues);
 
     setFormValues({
       email: "",
       password: "",
     });
 
-    if (data.status == 200) {
-      setCookie('user_id', data.users_id)
-      setCookie('first_name', data.first_name)
-      setCookie('last_name', data.last_name)
-      setCookie('user_type', data.user_type)
+    if (res.status == 200) {
+      setCookie('user_id', res.users_id)
+      setCookie('first_name', res.first_name)
+      setCookie('last_name', res.last_name)
+      setCookie('user_type', res.user_type)
       navigate("/dashboard", { replace: true });
+    } else {
+      alert(res.error);
     }
   };
 

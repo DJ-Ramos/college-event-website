@@ -1,5 +1,5 @@
 export const LoginAPI = async (formValues) => {
-  let userData;
+  let res = null;
   await fetch(`http://localhost:5000/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json; charset=UTF-8" },
@@ -9,20 +9,23 @@ export const LoginAPI = async (formValues) => {
       if (res.ok) {
         return res.json();
       } else {
-        throw new Error("Incorrect Email and Password Combination");
+        throw new Error(alert("Incorrect Email and Password Combination"));
       }
     })
     .then((data) => {
       data.status = 200;
-      userData = data;
+      res = data;
     })
-    .catch((error) => console.error(error));
-  return userData;
+    .catch((error) => {
+      console.error(error);
+      res = { status: 400, error: error };
+    });
+  return res;
 };
 
 export const RegisterAPI = async (formValues) => {
   let status;
-  await fetch(`http://localhost:5000/register`, {
+  await fetch(process.env.APP_URL + "/register", {
     method: "POST",
     headers: { "Content-Type": "application/json; charset=UTF-8" },
     body: JSON.stringify(formValues),
@@ -33,7 +36,7 @@ export const RegisterAPI = async (formValues) => {
         return res.json();
       } else {
         throw new Error(
-          "Error in Registering Account. This Email Might Have Been Already Registered. Try Again."
+          alert("Error in Registering Account. This Email Might Have Been Already Registered. Try Again.")
         );
       }
     })

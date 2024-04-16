@@ -1,14 +1,15 @@
 {
   "files": {
-    "main.css": "/static/css/main.b8bc805e.css",
-    "main.js": "/static/js/main.672809d9.js",
+    "main.css": "/static/css/main.46d0f985.css",
+    "main.js": "/static/js/main.b1d0c78e.js",
+    "static/media/Map-of-universities.png": "/static/media/Map-of-universities.5d647018b7c80e59fac0.png",
     "static/media/knightro-searching.jpg": "/static/media/knightro-searching.8104710698bd10d7492f.jpg",
     "index.html": "/index.html",
-    "main.b8bc805e.css.map": "/static/css/main.b8bc805e.css.map",
-    "main.672809d9.js.map": "/static/js/main.672809d9.js.map"
+    "main.46d0f985.css.map": "/static/css/main.46d0f985.css.map",
+    "main.b1d0c78e.js.map": "/static/js/main.b1d0c78e.js.map"
   },
   "entrypoints": [
-    "static/css/main.b8bc805e.css",
-    "static/js/main.672809d9.js"
+    "static/css/main.46d0f985.css",
+    "static/js/main.b1d0c78e.js"
   ]
 }

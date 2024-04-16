@@ -18,10 +18,10 @@ const DisplayUniversity = () => {
   }, []);
 
   return (
-    <Row className="mt-5 g-4">
+    <Row className="py-5 g-4">
       {universityData.map((university) => (
-        <Col key={university.university_id}>
-          <Card style={{ width: "18rem" }}>
+        <Col key={university.university_id} id={university.university_id}>
+          <Card style={{ width: "18rem"}}>
             <Card.Img
               className="bg-light"
               variant="top"
@@ -31,7 +31,7 @@ const DisplayUniversity = () => {
             <Card.Body>
               <Card.Title>{university.name}</Card.Title>
               <Card.Text>{university.description}</Card.Text>
-              <Button variant="dark">View University</Button>
+              <Button href={`/dashboard/university/${university.university_id}`} variant="dark">View</Button>
             </Card.Body>
           </Card>
         </Col>
