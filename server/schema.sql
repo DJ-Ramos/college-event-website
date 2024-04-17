@@ -135,6 +135,19 @@ ALTER FUNCTION public.check_pu_id() OWNER TO postgres;
 -- Name: check_rso_event_disjoint(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
+CREATE FUNCTION public.check_rso_event_admin() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$BEGIN
+	IF NEW.admin_id NOT IN (SELECT admin_id FROM rsos WHERE rso_id = NEW.rso_id) THEN
+		RAISE EXCEPTION 'RSO event must be created by that RSOs Admin.';
+	END IF;
+	
+	RETURN NEW;
+END;$$;
+
+
+ALTER FUNCTION public.check_rso_event_admin() OWNER TO postgres;
+
 CREATE FUNCTION public.check_rso_event_disjoint() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
@@ -170,6 +183,35 @@ $$;
 
 
 ALTER FUNCTION public.check_rso_id() OWNER TO postgres;
+
+CREATE FUNCTION public.check_if_rso_active() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$BEGIN
+    IF (SELECT COUNT(*) FROM "join"
+        WHERE rso_id = NEW.rso_id) > 4 THEN
+        UPDATE rsos
+        	SET status = 'active'
+        	WHERE rso_id = NEW.rso_id;
+    END IF;
+    
+    RETURN NEW;
+END;$$;
+
+
+ALTER FUNCTION public.check_if_rso_active() OWNER TO postgres;
+
+CREATE FUNCTION public.check_if_rso_inactive() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$BEGIN
+    IF (SELECT COUNT(*) FROM "join"
+        WHERE rso_id = OLD.rso_id) < 5 THEN
+        UPDATE rsos
+        	SET status = 'inactive'
+        	WHERE rso_id = OLD.rso_id;
+    END IF;
+    
+    RETURN OLD;
+END;$$;
 
 --
 -- TOC entry 236 (class 1255 OID 49370)
@@ -311,7 +353,8 @@ CREATE TABLE public.rso_event (
     location text NOT NULL,
     description text NOT NULL,
     name text NOT NULL,
-    date timestamp without time zone NOT NULL
+    date timestamp without time zone NOT NULL,
+    admin_id integer NOT NULL
 );
 
 
@@ -681,6 +724,17 @@ CREATE TRIGGER pu_event_disjoint BEFORE INSERT OR UPDATE ON public.public_events
 
 CREATE TRIGGER pu_isa_event BEFORE INSERT OR UPDATE ON public.public_events FOR EACH ROW EXECUTE FUNCTION public.check_pu_id();
 
+CREATE TRIGGER rso_event_creator_is_admin BEFORE INSERT OR UPDATE ON public.rso_events FOR EACH ROW EXECUTE FUNCTION public.check_rso_event_admin();
+
+CREATE TRIGGER rso_event_disjoint BEFORE INSERT OR UPDATE ON public.rso_events FOR EACH ROW EXECUTE FUNCTION public.check_rso_event_disjoint();
+
+CREATE TRIGGER rso_isa_event BEFORE INSERT OR UPDATE ON public.rso_events FOR EACH ROW EXECUTE FUNCTION public.check_rso_id();
+
+CREATE TRIGGER rso_member_delete AFTER DELETE ON public."join" FOR EACH ROW EXECUTE FUNCTION public.check_if_rso_inactive();
+
+CREATE TRIGGER rso_member_insert AFTER INSERT ON public."join" FOR EACH ROW EXECUTE FUNCTION public.check_if_rso_active();
+
+CREATE TRIGGER super_admin_isa_user BEFORE INSERT OR UPDATE ON public.super_admins FOR EACH ROW EXECUTE FUNCTION public.check_super_admin_id();
 
 --
 -- TOC entry 3261 (class 2606 OID 49463)
