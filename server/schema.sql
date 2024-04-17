@@ -78,7 +78,7 @@ CREATE FUNCTION public.check_pr_id() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
-    IF NEW.event_id NOT IN (SELECT event_id FROM event) THEN
+    IF NEW.event_id NOT IN (SELECT event_id FROM events) THEN
         RAISE EXCEPTION 'private_events event_id must exist in event table';
     END IF;
 
@@ -119,7 +119,7 @@ CREATE FUNCTION public.check_pu_id() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
-    IF NEW.event_id NOT IN (SELECT event_id FROM event) THEN
+    IF NEW.event_id NOT IN (SELECT event_id FROM events) THEN
         RAISE EXCEPTION 'public_events event_id must exist in event table';
     END IF;
 
@@ -160,7 +160,7 @@ CREATE FUNCTION public.check_rso_id() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
-    IF NEW.event_id NOT IN (SELECT event_id FROM event) THEN
+    IF NEW.event_id NOT IN (SELECT event_id FROM events) THEN
         RAISE EXCEPTION 'rso_events event_id must exist in event table';
     END IF;
 
