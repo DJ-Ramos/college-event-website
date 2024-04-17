@@ -724,7 +724,7 @@ CREATE TRIGGER pu_event_disjoint BEFORE INSERT OR UPDATE ON public.public_events
 
 CREATE TRIGGER pu_isa_event BEFORE INSERT OR UPDATE ON public.public_events FOR EACH ROW EXECUTE FUNCTION public.check_pu_id();
 
-CREATE TRIGGER rso_event_creator_is_admin BEFORE INSERT OR UPDATE ON public.rso_events FOR EACH ROW EXECUTE FUNCTION public.check_rso_event_admin();
+CREATE TRIGGER rso_event_creator_is_admin BEFORE INSERT OR UPDATE ON public.rso_event FOR EACH ROW EXECUTE FUNCTION public.check_rso_event_admin();
 
 CREATE TRIGGER rso_event_disjoint BEFORE INSERT OR UPDATE ON public.rso_events FOR EACH ROW EXECUTE FUNCTION public.check_rso_event_disjoint();
 
