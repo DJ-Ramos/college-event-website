@@ -20,7 +20,7 @@ const Events = ({ userName }) => {
   return (
     <Container>
       <h1>Welcome to Events!</h1>
-      {/* Other content */}
+      
     </Container>
   );
 };
