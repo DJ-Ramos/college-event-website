@@ -58,7 +58,7 @@ CREATE FUNCTION public.check_pr_event_disjoint() RETURNS trigger
     AS $$
 BEGIN
     IF NEW.event_id IN (SELECT event_id FROM public_events) 
-	OR NEW.event_id IN (SELECT event_id FROM rso_events) THEN
+	OR NEW.event_id IN (SELECT event_id FROM rso_event) THEN
         RAISE EXCEPTION 'private_events event_id must not exist in public_events or rso_events tables';
     END IF;
 
@@ -99,7 +99,7 @@ CREATE FUNCTION public.check_pu_event_disjoint() RETURNS trigger
     AS $$
 BEGIN
     IF NEW.event_id IN (SELECT event_id FROM private_events) 
-	OR NEW.event_id IN (SELECT event_id FROM rso_events) THEN
+	OR NEW.event_id IN (SELECT event_id FROM rso_event) THEN
         RAISE EXCEPTION 'public_events event_id must not exist in private_events or rso_events tables';
     END IF;
 
