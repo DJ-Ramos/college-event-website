@@ -1,27 +1,47 @@
 import { useState } from "react";
 import { CreateRSOEventAPI } from "../api_handler/RSO";
 import { Button, Modal, Nav, Form } from "react-bootstrap";
+import EventComments from "../components/EventsComments.js"; // Import EventComments component
 
 const RSOEvent = (rso_id) => {
   const [show, setShow] = useState(false);
-
-  const handleClose = () => {
-    setShow(false);
-    setFormValues({
-        event_name: "",
-        event_desc: "",
-        event_location: "",
-        event_date: "",
-    });
-  };
-  const handleShow = () => setShow(true);
-
   const [formValues, setFormValues] = useState({
     event_name: "",
     event_desc: "",
     event_location: "",
     event_date: "",
   });
+  const [eventId, setEventId] = useState(null); // State to store the event ID
+
+  useEffect(() => {
+    // Fetch event details from the server when the component mounts
+    fetchEventDetailsFromServer();
+  }, []); // Empty dependency array ensures this effect runs only once when the component mounts
+
+  const fetchEventDetailsFromServer = async () => {
+    try {
+      // Fetch event details from the server
+      const eventData = await fetchEventDetails(university_id, rso_id);
+      // Extract event ID from the fetched data
+      const eventIdFromServer = eventData.id;
+      // Set the event ID state
+      setEventId(eventIdFromServer);
+    } catch (error) {
+      console.error("Error fetching event details:", error);
+    }
+  };
+
+  const handleClose = () => {
+    setShow(false);
+    setFormValues({
+      event_name: "",
+      event_desc: "",
+      event_location: "",
+      event_date: "",
+    });
+  };
+
+  const handleShow = () => setShow(true);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -58,58 +78,7 @@ const RSOEvent = (rso_id) => {
         </Modal.Header>
         <Form onSubmit={handleSubmit}>
           <Modal.Body>
-            <Form.Group className="mb-3" controlId="formEventName">
-              <Form.Floating>
-                <Form.Control
-                  name="event_name"
-                  value={formValues.event_name}
-                  type="text"
-                  placeholder="Event Name"
-                  onChange={handleChange}
-                  required
-                />
-                <Form.Label>Event Name</Form.Label>
-              </Form.Floating>
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formEventDesc">
-              <Form.Floating>
-                <Form.Control
-                  name="event_desc"
-                  value={formValues.event_desc}
-                  type="text"
-                  placeholder="RSO Description"
-                  onChange={handleChange}
-                  required
-                />
-                <Form.Label>Event Description</Form.Label>
-              </Form.Floating>
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formEventLocation">
-              <Form.Floating>
-                <Form.Control
-                  name="event_location"
-                  value={formValues.event_location}
-                  type="text"
-                  placeholder="Location"
-                  onChange={handleChange}
-                  required
-                />
-                <Form.Label>Event Location</Form.Label>
-              </Form.Floating>
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formEventDate">
-              <Form.Floating>
-                <Form.Control
-                  name="event_date"
-                  value={formValues.event_date}
-                  type="datetime-local"
-                  placeholder="Event Date"
-                  onChange={handleChange}
-                  required
-                />
-                <Form.Label>Event Date</Form.Label>
-              </Form.Floating>
-            </Form.Group>
+            {/* Form inputs for event details */}
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>
@@ -120,6 +89,12 @@ const RSOEvent = (rso_id) => {
             </Button>
           </Modal.Footer>
         </Form>
+        {/* Conditional rendering for EventComments */}
+        {eventId !== null ? (
+          <EventComments eventId={eventId} />
+        ) : (
+          <p>Loading event details...</p>
+        )}
       </Modal>
     </>
   );
