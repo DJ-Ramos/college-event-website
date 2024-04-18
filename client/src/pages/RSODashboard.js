@@ -3,6 +3,7 @@ import { Container, Navbar, Nav } from "react-bootstrap";
 import { logout } from "../utils/logoutUtil";
 import RSOProfile from "../components/RSOProfile";
 import DisplayRSO from "../components/DisplayRSO";
+import getCookie from "../hooks/getCookie";
 
 const RSODashboard = () => {
   const { id } = useParams();
@@ -15,6 +16,10 @@ const RSODashboard = () => {
 
   const handleClick = () => {
     navigate(`/dashboard/university/${id}/public_events`, { replace: true });
+  };
+  
+  const handleBack = () => {
+    navigate("/dashboard", { replace: true });
   }
 
   return (
@@ -25,18 +30,26 @@ const RSODashboard = () => {
             <h1 className="display-5">RSO Dashboard</h1>
           </Navbar.Brand>
           <Nav className="justify-content-end">
-            <Nav.Link href="#" onClick={handleClick}>
+            {<Nav.Link href="#" onClick={handleClick}>
               <p className="h5">Public Events</p>
-            </Nav.Link>
-            <RSOProfile university_id={id} />
+            </Nav.Link>}
+            {getCookie("domain") === getCookie("uni_domain") && <Nav.Link href="#" onClick={handleClick}>
+              <p className="h5">Private Events</p>
+            </Nav.Link>}
+            {getCookie("domain") === getCookie("uni_domain") && (
+              <RSOProfile university_id={id} />
+            )}
             <Nav.Link href="#" onClick={handleLogout}>
               <p className="h5">Logout</p>
             </Nav.Link>
+            <Nav.Link href="#" onClick={handleBack}><p className="h5">Previous Page</p></Nav.Link>
           </Nav>
         </Container>
       </Navbar>
       <Container className="d-flex">
-        <DisplayRSO university_id={id} />
+        {getCookie("domain") === getCookie("uni_domain") && (
+          <DisplayRSO university_id={id} />
+        )}
       </Container>
     </>
   );

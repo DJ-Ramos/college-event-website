@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { CreateRSOAPI } from "../api_handler/RSO";
+import { CreateRSOEventAPI } from "../api_handler/RSO";
 import { Button, Modal, Nav, Form } from "react-bootstrap";
 
-const RSOEvent = (university_id, rso_id) => {
+const RSOEvent = (rso_id) => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => {
@@ -26,10 +26,9 @@ const RSOEvent = (university_id, rso_id) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    formValues.university_id = university_id;
     formValues.rso_id = rso_id;
     console.log(formValues);
-    const data = await CreateRSOAPI(formValues);
+    const data = await CreateRSOEventAPI(formValues);
 
     setFormValues({
       event_name: "",

@@ -7,6 +7,8 @@ import Dashboard from "./pages/Dashboard";
 import RSODashboard from "./pages/RSODashboard";
 import PrivateRoutes from "./utils/PrivateRoutes";
 import EventDashboard from "./pages/EventDashboard";
+import PublicEventDashboard from "./pages/PublicEventDashboard";
+import PrivateEventDashboard from "./pages/PrivateEventDashboard";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
@@ -20,7 +22,8 @@ function App() {
           <Route element={<PrivateRoutes/>}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/dashboard/university/:id" element={<RSODashboard />} />
-            <Route path="/dashboard/university/:id/public_events" element={<RSODashboard />} />
+            <Route path="/dashboard/university/:id/public_events" element={<PublicEventDashboard />} />
+            <Route path="/dashboard/university/:id/private_events" element={<PrivateEventDashboard />} />
             <Route path="/dashboard/university/:id/rso/:rso_id" element={<EventDashboard />} />
           </Route>
           <Route path="*" element={<NotFound />} />

@@ -7,12 +7,13 @@ const UniversityProfile = () => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => {
-    setShow(false)
+    setShow(false);
     setFormValues({
       uni_name: "",
       uni_location: "",
       uni_desc: "",
       uni_num: "",
+      domain: "",
     });
   };
   const handleShow = () => setShow(true);
@@ -22,6 +23,7 @@ const UniversityProfile = () => {
     uni_location: "",
     uni_desc: "",
     uni_num: "",
+    domain: "",
   });
 
   const handleSubmit = async (event) => {
@@ -36,6 +38,7 @@ const UniversityProfile = () => {
       uni_location: "",
       uni_desc: "",
       uni_num: "",
+      domain: "",
     });
 
     handleClose();
@@ -112,6 +115,19 @@ const UniversityProfile = () => {
                   required
                 />
                 <Form.Label>University Student Count</Form.Label>
+              </Form.Floating>
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formDomain">
+              <Form.Floating>
+                <Form.Control
+                  name="domain"
+                  value={formValues.domain}
+                  type="text"
+                  placeholder="University Email Domain"
+                  onChange={handleChange}
+                  required
+                />
+                <Form.Label>University Domain</Form.Label>
               </Form.Floating>
             </Form.Group>
             <Form.Group className="mb-3 text-center" controlId="formUniBanner">

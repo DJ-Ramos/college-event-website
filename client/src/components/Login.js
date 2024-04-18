@@ -20,20 +20,21 @@ const Login = () => {
 
     const res = await LoginAPI(formValues);
 
-    setFormValues({
-      email: "",
-      password: "",
-    });
-
     if (res.status == 200) {
       setCookie('user_id', res.users_id)
       setCookie('first_name', res.first_name)
       setCookie('last_name', res.last_name)
       setCookie('user_type', res.user_type)
+      setCookie('domain', formValues.email.split('@').pop())
       navigate("/dashboard", { replace: true });
     } else {
       alert(res.error);
     }
+
+    setFormValues({
+      email: "",
+      password: "",
+    });
   };
 
   const handleChange = (event) => {
